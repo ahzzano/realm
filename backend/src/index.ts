@@ -2,12 +2,20 @@ import { logMessage } from './util'
 import { Game, makeGame } from './types'
 
 const express = require('express')
+const bp = require('body-parser')
 
 const app = express()
 const port = 3000
 
+app.use(bp.json())
+app.use(bp.urlencoded({extended: true}))
+
 const games = []
 const freeIndices = []
+
+function verifyGameId(gameId: number) {
+    return gameId >= games.length || gameId < 0
+}
 
 app.get('/', (req, res) => {
     logMessage(`GET request at /`)
@@ -31,7 +39,7 @@ app.get('/create_game', (req, res) => {
 app.get('/games/:gameId', (req, res) => {
     let index = req.params.gameId
 
-    if(index >= games.length || index < 0) {
+    if(verifyGameId(index)) {
         logMessage(`Invalid ID: ${index}`)
 
         res.send(`Invalid ID: ${index}`)
@@ -39,6 +47,24 @@ app.get('/games/:gameId', (req, res) => {
     }
 
     res.json(games[index])
+})
+
+app.post('/games/:gameId/add_player', (req, res) => {
+    let index = req.params.gameId
+
+    logMessage(req.body)
+
+    let playerName: string = String(req.body.playerName)
+
+    if(verifyGameId(index)) {
+        logMessage(`Invalid ID: ${index}`)
+
+        res.send(`Invalid ID: ${index}`)
+        return
+    }
+
+    games[index].players.push(playerName)
+    res.redirect(`/games/${index}`)
 })
 
 app.listen(port, () => {

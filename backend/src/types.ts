@@ -1,8 +1,8 @@
 interface Game {
     gameId: number,
     maxPlayers: number,
-    mapPool: string[],
-    players: string[]
+    mapPool: any[],
+    players: any[]
 }
 
 function makeGame(gameId: number) {
