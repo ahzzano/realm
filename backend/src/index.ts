@@ -9,7 +9,6 @@ const port = 3000
 const games = []
 const freeIndices = []
 
-// default
 app.get('/', (req, res) => {
     logMessage(`GET request at /`)
     res.json({
@@ -31,6 +30,13 @@ app.get('/create_game', (req, res) => {
 
 app.get('/games/:gameId', (req, res) => {
     let index = req.params.gameId
+
+    if(index >= games.length || index < 0) {
+        logMessage(`Invalid ID: ${index}`)
+
+        res.send(`Invalid ID: ${index}`)
+        return
+    }
 
     res.json(games[index])
 })
