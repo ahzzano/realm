@@ -29,6 +29,12 @@ app.get('/create_game', (req, res) => {
     })
 })
 
+app.get('/games/:gameId', (req, res) => {
+    let index = req.params.gameId
+
+    res.json(games[index])
+})
+
 app.listen(port, () => {
     logMessage(`Starting Server on Port ${port}`)
 })
