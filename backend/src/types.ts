@@ -3,7 +3,9 @@ interface Game {
     maxPlayers: number,
     mapPool: any[],
     players: any[],
-    started: boolean
+    started: boolean,
+    team1: Team,
+    team2: Team
 }
 
 interface Team {
