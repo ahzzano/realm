@@ -49,10 +49,30 @@ app.get('/games/:gameId', (req, res) => {
     res.json(games[index])
 })
 
+app.get('/games/:gameid/start', (req, res) => {
+    let index = req.params.gameId
+    let playerName: string = String(req.body.playerName)
+
+    if(verifyGameId(index)) {
+        logMessage(`Invalid ID: ${index}`)
+        res.send(`Invalid ID: ${index}`)
+        return
+
+    }
+
+    if(!games[index].players.includes(playerName)) {
+        logMessage(`Player "${playerName}" not included in that game`)
+        res.send(`Player "${playerName}" not included in that game`)
+        return
+    }
+
+    games[index].started = true
+
+    res.redirect(`/games/${index}`)
+})
+
 app.post('/games/:gameId/add_player', (req, res) => {
     let index = req.params.gameId
-
-    logMessage(req.body)
 
     let playerName: string = String(req.body.playerName)
 

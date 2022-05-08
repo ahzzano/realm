@@ -6,6 +6,11 @@ interface Game {
     started: boolean
 }
 
+interface Team {
+    teamName: string,
+    players: string[]
+}
+
 function makeGame(gameId: number) {
     let game = {
         gameId: gameId,
