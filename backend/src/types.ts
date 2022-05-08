@@ -2,7 +2,8 @@ interface Game {
     gameId: number,
     maxPlayers: number,
     mapPool: any[],
-    players: any[]
+    players: any[],
+    started: boolean
 }
 
 function makeGame(gameId: number) {
@@ -10,7 +11,8 @@ function makeGame(gameId: number) {
         gameId: gameId,
         maxPlayers: 10,
         mapPool: [],
-        players: [] 
+        players: [], 
+        started: false
     }
 
     return game

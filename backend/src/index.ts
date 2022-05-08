@@ -63,6 +63,12 @@ app.post('/games/:gameId/add_player', (req, res) => {
         return
     }
 
+    if(games[index].players.includes(playerName)) {
+        logMessage(`Player "${playerName}" already in the game`)
+        res.send(`Player "${playerName}" already in the game`)
+        return
+    }
+
     games[index].players.push(playerName)
     res.redirect(`/games/${index}`)
 })
