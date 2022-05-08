@@ -93,6 +93,12 @@ app.post('/games/:gameId/add_player', (req, res) => {
     res.redirect(`/games/${index}`)
 })
 
-app.listen(port, () => {
+let server = app.listen(port, () => {
     logMessage(`Starting Server on Port ${port}`)
 })
+
+export {
+    app,
+    port,
+    server
+}
