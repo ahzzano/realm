@@ -10,7 +10,7 @@ const port = 3000
 app.use(bp.json())
 app.use(bp.urlencoded({extended: true}))
 
-const games = []
+let games: Game[] = []
 const freeIndices = []
 
 function verifyGameId(gameId: number) {
@@ -51,13 +51,12 @@ app.get('/games/:gameId', (req, res) => {
 
 app.get('/games/:gameid/start', (req, res) => {
     let index = req.params.gameId
-    let playerName: string = String(req.body.playerName)
+    let playerName: string = String(req.query.playerName)
 
     if(verifyGameId(index)) {
         logMessage(`Invalid ID: ${index}`)
         res.send(`Invalid ID: ${index}`)
         return
-
     }
 
     if(!games[index].players.includes(playerName)) {
@@ -67,7 +66,7 @@ app.get('/games/:gameid/start', (req, res) => {
     }
 
     games[index].started = true
-
+    logMessage('Starting game')
     res.redirect(`/games/${index}`)
 })
 

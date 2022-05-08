@@ -4,7 +4,7 @@ import fetch from 'node-fetch';
 
 const url = `https://localhost:${index.port}`
 
-
+jest.setTimeout(500)
 
 describe('API Server', () => {
     let game
@@ -82,7 +82,7 @@ describe('API Server', () => {
     })
    
     test('can start game', (done) => {
-        fetch(url + '/games/0/start').then((response) => {
+        fetch(url + '/games/0/start?playerName=Madoka' ).then((response) => {
             game.started = true
             expect(response.started).toBe(true)
         })
