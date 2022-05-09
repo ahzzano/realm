@@ -44,6 +44,10 @@ app.get('/create_game', (req, res) => {
     })
 })
 
+app.get('/games/:gameId/end', (req, res) => {
+
+})
+
 app.get('/games/:gameId', (req, res) => {
     let index = req.params.gameId
 
