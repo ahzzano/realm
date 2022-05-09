@@ -49,9 +49,11 @@ app.get('/games/:gameId', (req, res) => {
     res.json(games[index])
 })
 
-app.get('/games/:gameid/start', (req, res) => {
+app.get('/games/:gameId/start', (req, res) => {
     let index = req.params.gameId
     let playerName: string = String(req.query.playerName)
+    console.log(games[index])
+    logMessage(JSON.stringify(games[index]))
 
     if(verifyGameId(index)) {
         logMessage(`Invalid ID: ${index}`)
@@ -60,8 +62,8 @@ app.get('/games/:gameid/start', (req, res) => {
     }
 
     if(!games[index].players.includes(playerName)) {
-        logMessage(`Player "${playerName}" not included in that game`)
-        res.send(`Player "${playerName}" not included in that game`)
+        logMessage(`Player "${playerName}" not in game`)
+        res.send(`Player "${playerName}" not in game`)
         return
     }
 
