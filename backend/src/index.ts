@@ -75,7 +75,28 @@ app.get('/games/:gameId/start', (req, res) => {
         return
     }
 
+    if(games[index].started) {
+        res.redirect(`/games/${index}`)
+        return
+    }
+
     games[index].started = true
+
+    // Assign Players
+
+    for(let i = 0; i < games[index].players.length; i += 2) {
+        let chance = Math.random()
+
+        if(chance < 0.5) {
+            games[index].team1.players.push(games[index].players[i])
+            games[index].team2.players.push(games[index].players[i + 1])
+        }
+        else {
+            games[index].team2.players.push(games[index].players[i])
+            games[index].team1.players.push(games[index].players[i + 1])
+        }
+    }
+
     logMessage('Starting game')
     res.redirect(`/games/${index}`)
 })
