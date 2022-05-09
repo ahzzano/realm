@@ -84,9 +84,9 @@ describe('API Server', () => {
     test('can start game', (done) => {
         fetch(url + '/games/0/start?playerName=Madoka' ).then((response) => {
             game.started = true
+
             expect(response.started).toBe(true)
         })
-
     })
 
     afterAll(() => {
