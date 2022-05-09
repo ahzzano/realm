@@ -1,5 +1,6 @@
 import { logMessage } from './util'
 import { Game, makeGame } from './types'
+import { stringify } from 'querystring'
 
 const express = require('express')
 const bp = require('body-parser')
@@ -12,6 +13,13 @@ app.use(bp.urlencoded({extended: true}))
 
 let games: Game[] = []
 const freeIndices = []
+
+// Load Config File
+const fs = require('fs')
+
+let configData = fs.readFileSync('config.json')
+
+const config = JSON.parse(configData)
 
 function verifyGameId(gameId: number) {
     return gameId >= games.length || gameId < 0
@@ -27,7 +35,7 @@ app.get('/', (req, res) => {
 app.get('/create_game', (req, res) => {
     logMessage(`Creating game`)
     
-    let game: Game = makeGame(games.length);
+    let game: Game = makeGame(games.length, config.maps);
 
     games.push(game)
 

@@ -1,11 +1,13 @@
 interface Game {
     gameId: number,
     maxPlayers: number,
+    pickedMaps: any[],
     mapPool: any[],
     players: any[],
     started: boolean,
     team1: Team,
-    team2: Team
+    team2: Team,
+    team1Pick: boolean 
 }
 
 interface Team {
@@ -20,15 +22,17 @@ function makeTeam(teamname: string) {
     }
 }
 
-function makeGame(gameId: number) {
+function makeGame(gameId: number, maps: string[] = []) {
     let game = {
         gameId: gameId,
         maxPlayers: 10,
-        mapPool: [],
-        players: [], 
+        mapPool: maps,
+        players: [],
+        pickedMaps: [], 
         started: false,
         team1: makeTeam('team 1'),
-        team2: makeTeam('team 2')
+        team2: makeTeam('team 2'),
+        team1Pick: true
     }
 
     return game
