@@ -11,7 +11,7 @@ const port = 3000
 app.use(bp.json())
 app.use(bp.urlencoded({extended: true}))
 
-let games: Game[] = []
+let games = []
 const freeIndices = []
 
 // Load Config File
@@ -22,7 +22,13 @@ let configData = fs.readFileSync('config.json')
 const config = JSON.parse(configData)
 
 function verifyGameId(gameId: number) {
-    return gameId >= games.length || gameId < 0
+    let check1 = (gameId > games.length - 1) || gameId < 0
+
+    if(typeof games[gameId] === undefined) {
+        return true
+    }
+
+    return check1 
 }
 
 app.get('/', (req, res) => {
@@ -34,8 +40,15 @@ app.get('/', (req, res) => {
 
 app.get('/create_game', (req, res) => {
     logMessage(`Creating game`)
-    
-    let game: Game = makeGame(games.length, config.maps);
+   
+    let gameId = games.length
+
+    if(freeIndices.length > 0) {
+        gameId = freeIndices[freeIndices.length - 1]
+        freeIndices.pop()
+    }
+
+    let game: Game = makeGame(gameId, config.maps);
 
     games.push(game)
 
@@ -45,11 +58,25 @@ app.get('/create_game', (req, res) => {
 })
 
 app.get('/games/:gameId/end', (req, res) => {
+    let index = Number(req.params.gameId)
 
+    if(verifyGameId(index)) {
+        logMessage(`Invalid ID: ${index}`)
+
+        res.send(`Invalid ID: ${index}`)
+        return
+    }
+
+    games[index] = undefined
+
+    freeIndices.push(Number(index))
+    res.json({
+        'message': 'game has ended'
+    })
 })
 
 app.get('/games/:gameId', (req, res) => {
-    let index = req.params.gameId
+    let index = Number(req.params.gameId)
 
     if(verifyGameId(index)) {
         logMessage(`Invalid ID: ${index}`)
@@ -59,10 +86,12 @@ app.get('/games/:gameId', (req, res) => {
     }
 
     res.json(games[index])
+
+
 })
 
 app.get('/games/:gameId/start', (req, res) => {
-    let index = req.params.gameId
+    let index = Number(req.params.gameId)
     let playerName: string = String(req.query.playerName)
     console.log(games[index])
     logMessage(JSON.stringify(games[index]))
@@ -106,7 +135,7 @@ app.get('/games/:gameId/start', (req, res) => {
 })
 
 app.post('/games/:gameId/add_player', (req, res) => {
-    let index = req.params.gameId
+    let index = Number(req.params.gameId)
 
     let playerName: string = String(req.body.playerName)
 
