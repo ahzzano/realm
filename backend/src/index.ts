@@ -24,7 +24,7 @@ const config = JSON.parse(configData)
 function verifyGameId(gameId: number) {
     let check1 = (gameId > games.length - 1) || gameId < 0
 
-    if(typeof games[gameId] === undefined) {
+    if(typeof games[gameId] === 'undefined') {
         return true
     }
 
@@ -69,7 +69,7 @@ app.get('/games/:gameId/end', (req, res) => {
 
     games[index] = undefined
 
-    freeIndices.push(Number(index))
+    freeIndices.push(index)
     res.json({
         'message': 'game has ended'
     })
